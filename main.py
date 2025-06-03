@@ -8,7 +8,8 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.utils import executor
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
-
+from keep_alive import keep_alive
+keep_alive()
 # Bot tokenini o'rnating
 
 def get_db_connection():
