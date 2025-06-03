@@ -10,7 +10,6 @@ from aiogram.utils import executor
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 # Bot tokenini o'rnating
-API_TOKEN = '7327999954:AAH3syk5kiNsH84VS3NzxM5UysQcxPbwLeo'
 
 def get_db_connection():
     """PostgreSQL ulanishini olish"""
