@@ -9,31 +9,67 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.utils import executor
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from keep_alive import keep_alive
+from psycopg2 import OperationalError
+import logging
 keep_alive()
 # Bot tokenini o'rnating
 
+# Logging sozlamalari
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 def get_db_connection():
-    """PostgreSQL ulanishini olish"""
-    return psycopg2.connect(os.environ['DATABASE_URL'])
-
-def init_db():
-    """Ma'lumotlar bazasini ishga tushirish"""
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
+    """Xatolarga chidamli database ulanish funksiyasi"""
     try:
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS users (
-                user_id BIGINT PRIMARY KEY,
-                data JSONB NOT NULL
-            )
-        ''')
+        # Agar DATABASE_URL mavjud bo'lmasa, lokal SQLite ishlatamiz
+        db_url = os.environ.get('DATABASE_URL')
+        if db_url:
+            conn = psycopg2.connect(db_url)
+            logger.info("PostgreSQL ga muvaffaqiyatli ulandi")
+            return conn
+        else:
+            logger.warning("DATABASE_URL topilmadi, SQLite ishlatilmoqda")
+            return sqlite3.connect('local_db.sqlite')
+    except OperationalError as e:
+        logger.error(f"Database ulanish xatosi: {e}")
+        return None
+def init_db():
+    """Xatolarga chidamli database ishga tushirish"""
+    conn = None
+    try:
+        conn = get_db_connection()
+        if conn is None:
+            logger.error("Database ulanmadi!")
+            return False
+            
+        cursor = conn.cursor()
+        
+        # PostgreSQL yoki SQLite uchun mos query
+        if 'postgresql' in os.environ.get('DATABASE_URL', ''):
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS users (
+                    user_id BIGINT PRIMARY KEY,
+                    data JSONB
+                )
+            ''')
+        else:  # SQLite
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS users (
+                    user_id INTEGER PRIMARY KEY,
+                    data TEXT
+                )
+            ''')
+        
         conn.commit()
+        logger.info("Database muvaffaqiyatli ishga tushirildi")
+        return True
+        
     except Exception as e:
-        print(f"Xatolik yuz berdi: {e}")
+        logger.error(f"Database ishga tushirishda xato: {e}")
+        return False
     finally:
-        conn.close()
-
+        if conn:
+            conn.close()
 # Botni ishga tushirish
 bot = Bot(token=os.environ['API_TOKEN'])
 storage = MemoryStorage()
@@ -817,5 +853,21 @@ async def show_leaderboard(message: types.Message):
     await message.answer("\n".join(leaderboard), reply_markup=main_menu_keyboard())
 
 # Botni ishga tushirish
+
+async def on_startup(dp):
+    """Bot ishga tushganda ishlaydigan funksiya"""
+    if not init_db():
+        logger.error("Dastur to'xtatildi - database ulanmadi!")
+        # Bu yerda siz botni to'xtatish yoki offline rejimda ishlashni tanlashingiz mumkin
+        import sys
+        sys.exit(1)
+    logger.info("Bot muvaffaqiyatli ishga tushdi")
+
 if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates=True)
+    # Webhook emas, polling rejimida ishlaymiz
+    executor.start_polling(
+        dp,
+        skip_updates=True,
+        on_startup=on_startup,
+        timeout=60
+    )
