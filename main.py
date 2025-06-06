@@ -7,12 +7,13 @@ from aiogram.utils import executor
 import random
 import json
 import os
-
+from keep_alive import keep_alive
+keep_alive()
 # Logging sozlamalari
 logging.basicConfig(level=logging.INFO)
 
 # Bot tokeni
-API_TOKEN = '7327999954:AAH3syk5kiNsH84VS3NzxM5UysQcxPbwLeo'
+API_TOKEN = os.environ.get('token')
 
 # Botni yaratish
 bot = Bot(token=API_TOKEN)
