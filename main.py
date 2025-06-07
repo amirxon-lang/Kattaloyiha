@@ -7,8 +7,9 @@ from aiogram.utils import executor
 import random
 import json
 import os
-from keep_alive import keep_alive
+from keep_qlive import keep_alive
 keep_alive()
+
 # Logging sozlamalari
 logging.basicConfig(level=logging.INFO)
 
@@ -104,6 +105,30 @@ def calculate_damage(user, enemy_damage):
     
     return max(0, enemy_damage - user['armor']['defense'])
 
+async def handle_death(user_id, message: types.Message):
+    user = get_user(user_id)
+    
+    # Jazolarni qo'llash
+    xp_loss = int(user['xp'] * 0.4)  # XP ning 30% yo'qoladi
+    coins_loss = int(user['coins'] * 0.4)  # Tangalarning 40% yo'qoladi
+    
+    user['xp'] = max(0, user['xp'] - xp_loss)
+    user['coins'] = max(0, user['coins'] - coins_loss)
+    
+    # Bosslarni qayta tartiblash (oldingi darajaga tushirish)
+    # Jonni 1 qilib qo'yamiz (to'liq o'ldirmaymiz)
+    user['health'] = 1
+    
+    update_user(user_id, user)
+    
+    await message.answer(
+        f"💀 Siz o'ldingiz! Jazo sifatida:\n"
+        f"⭐ XP: -{xp_loss}\n"
+        f"💰 Tangalar: -{coins_loss}\n\n"
+        f"Qayta tirilish uchun /start buyrug'ini yuboring."
+    )
+    
+    
 # Asosiy menyu
 async def show_main_menu(message: types.Message):
     user = get_user(message.from_user.id)
@@ -625,33 +650,7 @@ async def process_battle_action(message: types.Message, state: FSMContext):
 
 # Asosiy commandalar
 # O'lim jarayoni - yangi versiya
-async def handle_death(user_id, message: types.Message):
-    users = load_users()
-    user = users[str(user_id)]
-    
-    # Jazolarni qo'llash
-    xp_loss = int(user['xp'] * 0.3)  # XP ning 20% yo'qoladi
-    coins_loss = int(user['coins'] * 0.4)  # Tangalarning 30% yo'qoladi
-    
-    user['xp'] = max(0, user['xp'] - xp_loss)
-    user['coins'] = max(0, user['coins'] - coins_loss)
-    
-    # Bosslarni qayta tartiblash (oldingi darajaga tushirish)
-    if user['bosses_defeated'] > 0:
-        user['bosses_defeated'] -= 1
-    
-    # Jonni 1 qilib qo'yamiz (to'liq o'ldirmaymiz)
-    user['health'] = 1
-    
-    save_users(users)
-    
-    await message.answer(
-        f"💀 Siz o'ldingiz! Jazo sifatida:\n"
-        f"⭐ XP: -{xp_loss}\n"
-        f"💰 Tangalar: -{coins_loss}\n"
-        f"👹 Bosslar: -1 (oldingi darajaga qaytdi)\n\n"
-        f"Qayta tirilish uchun /start buyrug'ini yuboring."
-    )
+
 
 # /start handler - yangi versiya
 @dp.message_handler(commands=['start', 'help'])
