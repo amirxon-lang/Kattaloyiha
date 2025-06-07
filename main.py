@@ -7,7 +7,7 @@ from aiogram.utils import executor
 import random
 import json
 import os
-from keep_qlive import keep_alive
+from keep_alive import keep_alive
 keep_alive()
 
 # Logging sozlamalari
