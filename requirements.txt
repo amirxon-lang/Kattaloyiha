@@ -2,3 +2,4 @@ aiogram==2.25.1
 psycopg2-binary
 python-dotenv
 flask
+python_version = "3.10.13"
