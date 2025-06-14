@@ -46,6 +46,7 @@ WEAPONS = [
     {'name': 'Temir qilich', 'damage': 10, 'price': 300, 'level': 2},
     {'name': 'Sehrli qilich', 'damage': 20, 'price': 700, 'level': 3},
     {'name': 'Afsonaviy qilich', 'damage': 40, 'price': 1500, 'level': 5}
+    {'name': 'eng zor qilich', 'damage': 80, 'price': 3500, 'level': 10}
 ]
 
 # Zirhlar ro'yxati
@@ -54,13 +55,14 @@ ARMORS = [
     {'name': 'Temir zirh', 'defense': 7, 'price': 300, 'level': 2},
     {'name': 'Sehrli zirh', 'defense': 15, 'price': 700, 'level': 3},
     {'name': 'Afsonaviy zirh', 'defense': 30, 'price': 1500, 'level': 5}
+    {'name': 'eng zor zirh', 'defense': 60, 'price': 3500, 'level': 10}
 ]
 
 # Auralar ro'yxati
 AURAS = [
     {'name': 'Kumush aura', 'price': 500, 'charges': 3, 'level': 2},
-    {'name': 'Oltin aura', 'price': 1000, 'charges': 3, 'level': 3},
-    {'name': 'Afsonaviy aura', 'price': 2000, 'charges': 3, 'level': 5}
+    {'name': 'Oltin aura', 'price': 1000, 'charges': 5, 'level': 3},
+    {'name': 'Afsonaviy aura', 'price': 2000, 'charges': 8, 'level': 5}
 ]
 
 # Missiyalar ro'yxati
@@ -76,7 +78,8 @@ BOSSES = [
     {'name': 'Qaroqchi boshliq', 'health': 100, 'damage': 15, 'xp': 200, 'coins': 300, 'min_level': 2},
     {'name': 'Sehrgar', 'health': 200, 'damage': 30, 'xp': 400, 'coins': 600, 'min_level': 3},
     {'name': 'Qora ritsar', 'health': 400, 'damage': 50, 'xp': 800, 'coins': 1200, 'min_level': 4},
-    {'name': 'O\'lim shohi', 'health': 800, 'damage': 80, 'xp': 1600, 'coins': 2500, 'min_level': 6}
+    {'name': 'O\'lim shohi', 'health': 800, 'damage': 80, 'xp': 1600, 'coins': 2500, 'min_level': 6},
+    {'name': 'judayam kuchli boss', 'health': 1600, 'damage': 160, 'xp': 3200, 'coins': 8000, 'min_level': 10}
 ]
 
 # Foydalanuvchilar ma'lumotlarini yuklash
@@ -380,7 +383,7 @@ async def show_shop_menu(message: types.Message):
         if aura['level'] <= user['level']:
             shop_text += (
                 f"{i}. {aura['name']}\n"
-                f"   🛡️ Himoya: 3 ta hujum\n"
+                f"   🛡️ Himoya: {aura['charges']} ta hujum\n"
                 f"   💰 Narx: {aura['price']}\n"
                 f"   📊 Level: {aura['level']}\n\n"
             )
