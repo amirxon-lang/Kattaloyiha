@@ -45,7 +45,7 @@ WEAPONS = [
     {'name': 'Oddiy qilich', 'damage': 5, 'price': 100, 'level': 1},
     {'name': 'Temir qilich', 'damage': 10, 'price': 300, 'level': 2},
     {'name': 'Sehrli qilich', 'damage': 20, 'price': 700, 'level': 3},
-    {'name': 'Afsonaviy qilich', 'damage': 40, 'price': 1500, 'level': 5}
+    {'name': 'Afsonaviy qilich', 'damage': 40, 'price': 1500, 'level': 5},
     {'name': 'eng zor qilich', 'damage': 80, 'price': 3500, 'level': 10}
 ]
 
@@ -54,7 +54,7 @@ ARMORS = [
     {'name': 'Oddiy zirh', 'defense': 3, 'price': 100, 'level': 1},
     {'name': 'Temir zirh', 'defense': 7, 'price': 300, 'level': 2},
     {'name': 'Sehrli zirh', 'defense': 15, 'price': 700, 'level': 3},
-    {'name': 'Afsonaviy zirh', 'defense': 30, 'price': 1500, 'level': 5}
+    {'name': 'Afsonaviy zirh', 'defense': 30, 'price': 1500, 'level': 5},
     {'name': 'eng zor zirh', 'defense': 60, 'price': 3500, 'level': 10}
 ]
 
