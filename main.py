@@ -64,7 +64,6 @@ AURAS = [
     {'name': 'Oltin aura', 'price': 1000, 'charges': 5, 'level': 3},
     {'name': 'Afsonaviy aura', 'price': 2000, 'charges': 8, 'level': 5}
 ]
-https://minigameshtml.onrender.com
 # Missiyalar ro'yxati
 MISSIONS = [
     {'name': 'Boshiq ov', 'xp': 50, 'coins': 100, 'health_cost': 10, 'min_level': 1},
