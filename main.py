@@ -64,7 +64,7 @@ AURAS = [
     {'name': 'Oltin aura', 'price': 1000, 'charges': 5, 'level': 3},
     {'name': 'Afsonaviy aura', 'price': 2000, 'charges': 8, 'level': 5}
 ]
-
+https://minigameshtml.onrender.com
 # Missiyalar ro'yxati
 MISSIONS = [
     {'name': 'Boshiq ov', 'xp': 50, 'coins': 100, 'health_cost': 10, 'min_level': 1},
@@ -145,17 +145,11 @@ async def show_main_menu(message: types.Message):
     ]
     keyboard.add(*buttons)
     
-    # Web app uchun inline keyboard
-    inline_keyboard = types.InlineKeyboardMarkup()
-    web_app_button = types.InlineKeyboardButton(
-        text="🎮 Web Appga kirish", 
-        web_app=types.WebAppInfo(url="https://minigameshtml.onrender.com")
-    )
-    inline_keyboard.add(web_app_button)
+    
     
     await message.answer("🏰 RPG O'yin Botiga xush kelibsiz! Quyidagi menyudan tanlang:", 
                         reply_markup=keyboard)
-    await message.answer("Yoki web app orqali o'ynash:", reply_markup=inline_keyboard)
+
 
 # Profilni ko'rsatish
 async def show_profile(message: types.Message):
